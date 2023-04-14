@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductDataAction } from './redux/action';
+import axios from "axios";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+
+const dispatch = useDispatch();
+const dataFromApi = useSelector(state=>state.productReducers);
+console.log("dataFromApi: "+dataFromApi.data);
+
+useEffect(()=>{
+  getProducts();
+  // eslint-disable-next-line
+},[]);
+
+const getProducts=()=>{
+
+  // let result = await fetch("https://fakestoreapi.com/products");
+  // result = await result.json();
+  // dispatch(getProductDataAction(result));
+
+  axios({
+    url: "https://fakestoreapi.com/products",
+    method: "GET",
+  }).then((res) => { 
+      dispatch(getProductDataAction(res));
+  })
 }
 
-export default App;
+  return (
+    <div>
+      {
+        dataFromApi.data ==null?
+        <h1>Please wait......</h1>:
+        dataFromApi.data.map((item,index)=>{
+          return (
+            <>
+            <p>{item.title}</p>
+            </>
+          );
+        })
+      }
+    </div>
+  )
+}
+
+export default App
