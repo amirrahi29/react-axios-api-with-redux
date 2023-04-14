@@ -8,6 +8,7 @@ const App = () => {
 const dispatch = useDispatch();
 const dataFromApi = useSelector(state=>state.productReducers);
 console.log("dataFromApi: "+dataFromApi.data);
+console.log("dataFromApi status: "+dataFromApi.status);
 
 useEffect(()=>{
   getProducts();
